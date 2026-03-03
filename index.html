@@ -1,363 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANANA HUT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eunicrus</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: url('path/to/your/texture.png') repeat;
+            animation: moveBackground 10s linear infinite;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        @keyframes moveBackground {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #fef9e7 0%, #fff9c4 50%, #ffecb3 100%);
-    min-height: 100vh;
-    padding: 20px;
-    font-size: 16px;
-}
+        .container {
+            width: 300px;
+            height: 300px;
+            margin: auto;
+            margin-top: 100px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateZ(0);
+            transition: transform 0.2s;
+        }
 
-h1 {
-    text-align: center;
-    font-size: 2.8em;
-    color: #f57f17;
-    margin-bottom: 30px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    font-weight: 700;
-}
+        .container:hover {
+            transform: translateZ(20px);
+        }
 
-h3 {
-    color: #f9a825;
-    margin-top: 20px;
-    margin-bottom: 12px;
-    font-size: 1.2em;
-}
+        .button {
+            padding: 10px 20px;
+            background: url('path/to/your/button-texture.png');
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
 
-label {
-    color: #f9a825;
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.container {
-    max-width: 850px;
-    margin: 0 auto;
-    background: linear-gradient(to bottom, #fffde7 0%, #ffffe0 100%);
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(245, 127, 23, 0.15);
-    border: 2px solid rgba(255, 193, 7, 0.3);
-}
-
-input, select, textarea {
-    padding: 12px 15px;
-    margin: 10px 0;
-    font-size: 1em;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: 2px solid #ffe082;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #333;
-    transition: all 0.3s ease;
-    font-family: inherit;
-}
-
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: #f9a825;
-    box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.1);
-    background-color: #fffef5;
-}
-
-input::placeholder, textarea::placeholder {
-    color: #bdb76b;
-}
-
-button {
-    padding: 12px 20px;
-    margin: 8px 0;
-    font-size: 1em;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-button:not(#resetBtn) {
-    background: linear-gradient(135deg, #f9a825 0%, #f57f17 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(249, 168, 37, 0.3);
-}
-
-button:not(#resetBtn):hover {
-    background: linear-gradient(135deg, #f57f17 0%, #e65100 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(245, 127, 23, 0.4);
-}
-
-button:not(#resetBtn):active {
-    transform: translateY(0);
-}
-
-#resetBtn {
-    background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(230, 81, 0, 0.3);
-}
-
-#resetBtn:hover {
-    background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(230, 81, 0, 0.4);
-}
-
-#receiptBox {
-    border: 2px solid #ffe082;
-    padding: 20px;
-    min-height: 150px;
-    white-space: pre-line;
-    margin-top: 15px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    color: #333;
-    font-family: 'Courier New', monospace;
-    font-size: 0.95em;
-    line-height: 1.6;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-}
-
-#total {
-    color: #f57f17;
-    font-weight: 700;
-    font-size: 1.1em;
-}
-
-.inline {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.inline button {
-    flex: 1;
-    min-width: 150px;
-}
-
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    .container {
-        padding: 20px;
-        border-radius: 15px;
-    }
-
-    h1 {
-        font-size: 2em;
-        margin-bottom: 20px;
-    }
-
-    h3 {
-        font-size: 1.1em;
-    }
-
-    input, select, textarea, button {
-        padding: 10px 12px;
-        font-size: 0.95em;
-    }
-
-    .inline {
-        flex-direction: column;
-    }
-
-    .inline button {
-        width: 100%;
-    }
-} 
-</style>
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
-
-<div class="container">
-<h1>🍌 BANANA HUT RECEIPT</h1>
-
-<h3>Customer Info</h3>
-<input type="text" id="customerName" placeholder="Customer Name">
-<input type="text" id="customerAddress" placeholder="Customer Address">
-<textarea id="customerDesc" placeholder="Customer Description"></textarea>
-
-<label>Payment Status:</label>
-<select id="paymentStatus">
-<option value="Not Paid">Not Paid</option>
-<option value="Paid">Paid</option>
-</select>
-
-<h3>Add Item</h3>
-<div class="inline">
-<select id="item">
-<option value="25">Banana Chips - 25 pesos</option>
-<option value="30">Banana Shake - 30 pesos</option>
-<option value="20">Banana Balls - 20 pesos</option>
-</select>
-<input type="number" id="qty" placeholder="Quantity" min="1">
-</div>
-
-<button onclick="addItem()">Add Item</button>
-
-<h3>Receipt</h3>
-<div id="receiptBox"></div>
-
-<h3>Total: <span id="total">0</span> pesos</h3>
-
-<div class="inline">
-<button id="copyBtn">Copy Receipt</button>
-<button id="sendBtn">Send to Discord</button>
-<button id="resetBtn">Reset</button>
-</div>
-</div>
-
-<script>
-let total = 0;
-let receiptText = "";
-
-const webhookURL = "https://discord.com/api/webhooks/1408270581639417957/06xsSECv3SG3Z7iFHDJ3WslDjD51vgj0JzfppZTF2FVLbMP5Xjq9xSwEA-u-jTvgnMaN";
-
-// Load saved receipt if exists
-window.onload = function() {
-    const saved = localStorage.getItem("bananaReceipt");
-    if (saved) {
-        const data = JSON.parse(saved);
-        total = data.total;
-        receiptText = data.receiptText;
-        document.getElementById("receiptBox").innerText = receiptText;
-        document.getElementById("total").textContent = total;
-    }
-};
-
-// Save locally
-function saveLocal() {
-    localStorage.setItem("bananaReceipt", JSON.stringify({
-        total: total,
-        receiptText: receiptText
-    }));
-}
-
-function addItem() {
-    const itemSelect = document.getElementById("item");
-    const itemName = itemSelect.options[itemSelect.selectedIndex].text.split("-")[0].trim();
-    const price = Number(itemSelect.value);
-    const qty = Number(document.getElementById("qty").value);
-
-    if (!qty || qty <= 0) {
-        alert("Enter valid quantity");
-        return;
-    }
-
-    const subtotal = price * qty;
-    total += subtotal;
-
-    const line = `${itemName} x${qty} - ${subtotal} pesos`;
-    receiptText += line + "\n";
-
-    document.getElementById("receiptBox").innerText = receiptText;
-    document.getElementById("total").textContent = total;
-    document.getElementById("qty").value = "";
-
-    saveLocal();
-}
-
-function buildReceipt() {
-    const name = document.getElementById("customerName").value || "N/A";
-    const address = document.getElementById("customerAddress").value || "N/A";
-    const description = document.getElementById("customerDesc").value || "N/A";
-    const status = document.getElementById("paymentStatus").value;
-
-    return {
-        name, address, description, status
-    };
-}
-
-// Copy receipt
-document.getElementById("copyBtn").addEventListener("click", function() {
-    const info = buildReceipt();
-
-    const text =
-`Customer Name: ${info.name}\n"
-    + `Customer Address: ${info.address}\n"
-    + `Customer Description: ${info.description}\n"
-    + `Payment Status: ${info.status}\n"
-    + "\nItems:\n"
-    + `${receiptText}\n"
-    + `Total: ${total} pesos`;
-
-    navigator.clipboard.writeText(text);
-    alert("Receipt copied.");
-});
-
-// Send to Discord
-document.getElementById("sendBtn").addEventListener("click", async function() {
-
-    const info = buildReceipt();
-
-    const embed = {
-        title: "Banana Hut Receipt",
-        color: 16312073,
-        fields: [
-            { name: "Customer Name", value: info.name, inline: false },
-            { name: "Address", value: info.address, inline: false },
-            { name: "Description", value: info.description, inline: false },
-            { name: "Payment Status", value: info.status, inline: true },
-            { name: "Total", value: total + " pesos", inline: true },
-            { name: "Items", value: receiptText || "No items", inline: false }
-        ],
-        timestamp: new Date()
-    };
-
-    try {
-        const response = await fetch(webhookURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username: "Banana Hut Bot",
-                embeds: [embed]
-            })
-        });
-
-        if (response.ok) {
-            alert("Sent to Discord.");
-        } else {
-            alert("Failed to send.");
-        }
-    } catch (error) {
-        alert("Error sending.");
-    }
-});
-
-// Reset
-document.getElementById("resetBtn").addEventListener("click", function() {
-    if (confirm("Reset receipt?")) {
-        total = 0;
-        receiptText = "";
-        localStorage.removeItem("bananaReceipt");
-        document.getElementById("receiptBox").innerText = "";
-        document.getElementById("total").textContent = "0";
-        document.querySelectorAll("input, textarea").forEach(el => el.value = "");
-        document.getElementById("paymentStatus").value = "Not Paid";
-    }
-});
-</script>
-
+    <div class="container">
+        <h1>Welcome to Eunicrus!</h1>
+        <button class="button">Click Me</button>
+    </div>
 </body>
 </html>
