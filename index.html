@@ -6,74 +6,199 @@
 <title>BANANA HUT</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 30px;
-    background: #f8f8f8;
-    font-size: 18px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-h1 { text-align: center; font-size: 2.5em; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #fef9e7 0%, #fff9c4 50%, #ffecb3 100%);
+    min-height: 100vh;
+    padding: 20px;
+    font-size: 16px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.8em;
+    color: #f57f17;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-weight: 700;
+}
+
+h3 {
+    color: #f9a825;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    font-size: 1.2em;
+}
+
+label {
+    color: #f9a825;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
 
 .container {
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 850px;
+    margin: 0 auto;
+    background: linear-gradient(to bottom, #fffde7 0%, #ffffe0 100%);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(245, 127, 23, 0.15);
+    border: 2px solid rgba(255, 193, 7, 0.3);
 }
 
-input, select, button, textarea {
-    padding: 10px;
+input, select, textarea {
+    padding: 12px 15px;
+    margin: 10px 0;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 2px solid #ffe082;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #f9a825;
+    box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.1);
+    background-color: #fffef5;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #bdb76b;
+}
+
+button {
+    padding: 12px 20px;
     margin: 8px 0;
     font-size: 1em;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-button {
-    background: #4CAF50;
-    color: white;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-button:hover { background: #45a049; }
+button:not(#resetBtn) {
+    background: linear-gradient(135deg, #f9a825 0%, #f57f17 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(249, 168, 37, 0.3);
+}
+
+button:not(#resetBtn):hover {
+    background: linear-gradient(135deg, #f57f17 0%, #e65100 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(245, 127, 23, 0.4);
+}
+
+button:not(#resetBtn):active {
+    transform: translateY(0);
+}
+
+#resetBtn {
+    background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230, 81, 0, 0.3);
+}
+
+#resetBtn:hover {
+    background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 81, 0, 0.4);
+}
 
 #receiptBox {
-    border: 1px solid black;
-    padding: 15px;
+    border: 2px solid #ffe082;
+    padding: 20px;
     min-height: 150px;
     white-space: pre-line;
-    margin-top: 10px;
+    margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    line-height: 1.6;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#total {
+    color: #f57f17;
+    font-weight: 700;
+    font-size: 1.1em;
 }
 
 .inline {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.inline button {
+    flex: 1;
+    min-width: 150px;
 }
 
 @media (max-width: 600px) {
-    body { font-size: 16px; margin: 15px; }
-}
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 1.1em;
+    }
+
+    input, select, textarea, button {
+        padding: 10px 12px;
+        font-size: 0.95em;
+    }
+
+    .inline {
+        flex-direction: column;
+    }
+
+    .inline button {
+        width: 100%;
+    }
+} 
 </style>
 </head>
-
 <body>
 
 <div class="container">
-<h1>BANANA HUT RECEIPT</h1>
+<h1>🍌 BANANA HUT RECEIPT</h1>
 
 <h3>Customer Info</h3>
 <input type="text" id="customerName" placeholder="Customer Name">
 <input type="text" id="customerAddress" placeholder="Customer Address">
 <textarea id="customerDesc" placeholder="Customer Description"></textarea>
 
-<label>Status:</label>
+<label>Payment Status:</label>
 <select id="paymentStatus">
 <option value="Not Paid">Not Paid</option>
 <option value="Paid">Paid</option>
@@ -99,7 +224,7 @@ button:hover { background: #45a049; }
 <div class="inline">
 <button id="copyBtn">Copy Receipt</button>
 <button id="sendBtn">Send to Discord</button>
-<button id="resetBtn" style="background:#f44336;">Reset</button>
+<button id="resetBtn">Reset</button>
 </div>
 </div>
 
@@ -169,14 +294,13 @@ document.getElementById("copyBtn").addEventListener("click", function() {
     const info = buildReceipt();
 
     const text =
-`Customer Name: ${info.name}
-Customer Address: ${info.address}
-Customer Description: ${info.description}
-Payment Status: ${info.status}
-
-Items:
-${receiptText}
-Total: ${total} pesos`;
+`Customer Name: ${info.name}\n"
+    + `Customer Address: ${info.address}\n"
+    + `Customer Description: ${info.description}\n"
+    + `Payment Status: ${info.status}\n"
+    + "\nItems:\n"
+    + `${receiptText}\n"
+    + `Total: ${total} pesos`;
 
     navigator.clipboard.writeText(text);
     alert("Receipt copied.");
@@ -189,7 +313,7 @@ document.getElementById("sendBtn").addEventListener("click", async function() {
 
     const embed = {
         title: "Banana Hut Receipt",
-        color: 5763719,
+        color: 16312073,
         fields: [
             { name: "Customer Name", value: info.name, inline: false },
             { name: "Address", value: info.address, inline: false },
