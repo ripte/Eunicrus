@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANANA HUT</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background: #f8f8f8;
+    font-size: 18px;
+}
+
+h1 { text-align: center; font-size: 2.5em; }
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+input, select, button, textarea {
+    padding: 10px;
+    margin: 8px 0;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover { background: #45a049; }
+
+#receiptBox {
+    border: 1px solid black;
+    padding: 15px;
+    min-height: 150px;
+    white-space: pre-line;
+    margin-top: 10px;
+}
+
+.inline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    body { font-size: 16px; margin: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>BANANA HUT RECEIPT</h1>
+
+<h3>Customer Info</h3>
+<input type="text" id="customerName" placeholder="Customer Name">
+<input type="text" id="customerAddress" placeholder="Customer Address">
+<textarea id="customerDesc" placeholder="Customer Description"></textarea>
+
+<label>Status:</label>
+<select id="paymentStatus">
+<option value="Not Paid">Not Paid</option>
+<option value="Paid">Paid</option>
+</select>
+
+<h3>Add Item</h3>
+<div class="inline">
+<select id="item">
+<option value="25">Banana Chips - 25 pesos</option>
+<option value="30">Banana Shake - 30 pesos</option>
+<option value="20">Banana Balls - 20 pesos</option>
+</select>
+<input type="number" id="qty" placeholder="Quantity" min="1">
+</div>
+
+<button onclick="addItem()">Add Item</button>
+
+<h3>Receipt</h3>
+<div id="receiptBox"></div>
+
+<h3>Total: <span id="total">0</span> pesos</h3>
+
+<div class="inline">
+<button id="copyBtn">Copy Receipt</button>
+<button id="sendBtn">Send to Discord</button>
+<button id="resetBtn" style="background:#f44336;">Reset</button>
+</div>
+</div>
+
+<script>
+let total = 0;
+let receiptText = "";
+
+const webhookURL = "https://discord.com/api/webhooks/1408270581639417957/06xsSECv3SG3Z7iFHDJ3WslDjD51vgj0JzfppZTF2FVLbMP5Xjq9xSwEA-u-jTvgnMaN";
+
+// Load saved receipt if exists
+window.onload = function() {
+    const saved = localStorage.getItem("bananaReceipt");
+    if (saved) {
+        const data = JSON.parse(saved);
+        total = data.total;
+        receiptText = data.receiptText;
+        document.getElementById("receiptBox").innerText = receiptText;
+        document.getElementById("total").textContent = total;
+    }
+};
+
+// Save locally
+function saveLocal() {
+    localStorage.setItem("bananaReceipt", JSON.stringify({
+        total: total,
+        receiptText: receiptText
+    }));
+}
+
+function addItem() {
+    const itemSelect = document.getElementById("item");
+    const itemName = itemSelect.options[itemSelect.selectedIndex].text.split("-")[0].trim();
+    const price = Number(itemSelect.value);
+    const qty = Number(document.getElementById("qty").value);
+
+    if (!qty || qty <= 0) {
+        alert("Enter valid quantity");
+        return;
+    }
+
+    const subtotal = price * qty;
+    total += subtotal;
+
+    const line = `${itemName} x${qty} - ${subtotal} pesos`;
+    receiptText += line + "\n";
+
+    document.getElementById("receiptBox").innerText = receiptText;
+    document.getElementById("total").textContent = total;
+    document.getElementById("qty").value = "";
+
+    saveLocal();
+}
+
+function buildReceipt() {
+    const name = document.getElementById("customerName").value || "N/A";
+    const address = document.getElementById("customerAddress").value || "N/A";
+    const description = document.getElementById("customerDesc").value || "N/A";
+    const status = document.getElementById("paymentStatus").value;
+
+    return {
+        name, address, description, status
+    };
+}
+
+// Copy receipt
+document.getElementById("copyBtn").addEventListener("click", function() {
+    const info = buildReceipt();
+
+    const text =
+`Customer Name: ${info.name}
+Customer Address: ${info.address}
+Customer Description: ${info.description}
+Payment Status: ${info.status}
+
+Items:
+${receiptText}
+Total: ${total} pesos`;
+
+    navigator.clipboard.writeText(text);
+    alert("Receipt copied.");
+});
+
+// Send to Discord
+document.getElementById("sendBtn").addEventListener("click", async function() {
+
+    const info = buildReceipt();
+
+    const embed = {
+        title: "Banana Hut Receipt",
+        color: 5763719,
+        fields: [
+            { name: "Customer Name", value: info.name, inline: false },
+            { name: "Address", value: info.address, inline: false },
+            { name: "Description", value: info.description, inline: false },
+            { name: "Payment Status", value: info.status, inline: true },
+            { name: "Total", value: total + " pesos", inline: true },
+            { name: "Items", value: receiptText || "No items", inline: false }
+        ],
+        timestamp: new Date()
+    };
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                username: "Banana Hut Bot",
+                embeds: [embed]
+            })
+        });
+
+        if (response.ok) {
+            alert("Sent to Discord.");
+        } else {
+            alert("Failed to send.");
+        }
+    } catch (error) {
+        alert("Error sending.");
+    }
+});
+
+// Reset
+document.getElementById("resetBtn").addEventListener("click", function() {
+    if (confirm("Reset receipt?")) {
+        total = 0;
+        receiptText = "";
+        localStorage.removeItem("bananaReceipt");
+        document.getElementById("receiptBox").innerText = "";
+        document.getElementById("total").textContent = "0";
+        document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+        document.getElementById("paymentStatus").value = "Not Paid";
+    }
+});
+</script>
+
+</body>
+</html>
